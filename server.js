@@ -1,22 +1,30 @@
-import express from "express"
-import dotenv from "dotenv"
-import connectDB from "./config/db.js"
-import router from "./routes/userRoutes.js"
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import router from "./routes/userRoutes.js";
+import cors from "Cors";
 
-dotenv.config()
+dotenv.config();
 
-const app=express();
+const app = express();
 
 connectDB();
 
-app.use(express.json())
+const allowedOrigins = process.env.CLIENT_URL.split(",");
 
-app.use("/api/user",router)
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
 
-const PORT=process.env.PORT
+app.use(express.json());
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on ${PORT}`)
-})
+app.use("/api/user", router);
 
+const PORT = process.env.PORT;
 
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
+});
