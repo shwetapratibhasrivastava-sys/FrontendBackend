@@ -10,7 +10,9 @@ const app = express();
 
 connectDB();
 
-const allowedOrigins = process.env.CLIENT_URL.split(",");
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((origin) => origin.trim())
+  : [];
 
 app.use(
   cors({
